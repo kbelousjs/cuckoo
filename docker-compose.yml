@@ -1,0 +1,43 @@
+version: "3.7"
+
+services:
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    volumes:
+      - mongo:/data/db
+    networks:
+      - cuckoo
+    
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgresadmin
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres: /var/lib/postgresql/data/pgdata
+    networks:
+      - cuckoo
+    
+  #cuckoo:
+  #  build: .
+  #  image: ubuntu
+  #  depends_on:
+  #    - mongo
+  #    - db
+  #  environment:
+
+networks:
+  cuckoo:
+    
+volumes:
+  mongo:
+  postgres:
