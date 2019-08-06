@@ -2,6 +2,8 @@ FROM ubuntu:18.04
 
 LABEL maintainer "https://github.com/kbelousjs"
 
+ENV CUCKOO_VERSION 2.0.5.3
+
 RUN apt update
 RUN apt install -y python python-pip python-dev libffi-dev libssl-dev
 RUN apt install -y python-virtualenv python-setuptools
