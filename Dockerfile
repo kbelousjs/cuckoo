@@ -62,8 +62,9 @@ RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
 # Install cuckoo sandbox and required dependencies
-#RUN pip install -U cuckoo==$CUCKOO
 RUN pip install cuckoo
+
+USER cuckoo
 
 # Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo
 RUN cuckoo
