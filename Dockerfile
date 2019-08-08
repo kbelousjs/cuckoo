@@ -64,6 +64,9 @@ RUN usermod -a -G vboxusers cuckoo
 # Install cuckoo sandbox and required dependencies
 RUN pip install cuckoo
 
+# Clean up unnecessary files 
+RUN rm -rf /tmp/*
+
 USER cuckoo
 
 # Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo
@@ -74,9 +77,6 @@ RUN cuckoo community
 
 # Initialize cuckoo sandbox web UI (built-in Django web server)
 RUN cuckoo web runserver 0.0.0.0:$CUCKOO_WEB_PORT
-
-# Clean up unnecessary files 
-RUN rm -rf /tmp/*
 
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
 #COPY conf ~/conf
