@@ -28,7 +28,8 @@ RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && p
 #RUN pip install pydeep
 
 # Install Other Tools and Required Dependencies
-RUN apt install -y tcpdump apparmor-utils && aa-disable /usr/sbin/tcpdump
+#RUN apt install -y tcpdump apparmor-utils && aa-disable /usr/sbin/tcpdump
+RUN apt install -y tcpdump apparmor-utils
 
 # Install Optional Volatility Tool
 RUN apt install -y volatility
