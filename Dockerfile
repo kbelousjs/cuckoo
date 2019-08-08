@@ -33,7 +33,9 @@ RUN apt install -y tcpdump apparmor-utils
 RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility && python setup.py build && python setup.py install
 
 # Install Optional M2Crypto Tool and Required Dependencies
-RUN apt install -y swig && pip install m2crypto==0.24.0
+RUN apt install -y swig 
+#RUN pip install m2crypto==0.24.0
+RUN pip install m2crypto
 
 # Install Optional Guacd Service and Required Dependencies
 RUN apt install -y libguac-client-rdp0 libguac-client-vnc0 libguac-client-ssh0 guacd
