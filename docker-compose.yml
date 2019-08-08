@@ -29,7 +29,12 @@ services:
     
   cuckoo:
     build: .
-    image: ubuntu
+    image: cuckoo:ubuntu
+    ports:
+      - "8000:8000"
+    links:
+      - mongo
+      - postgres
     container_name: cuckoo
     restart: always
     depends_on:
