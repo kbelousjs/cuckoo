@@ -23,16 +23,13 @@ RUN apt install -y libjpeg-dev zlib1g-dev swig curl git
 # Install Optional Pydeep Plugin and Required Dependencies
 RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
 RUN cd /tmp && tar xzf ssdeep-$SSDEEP.tar.gz && cd ssdeep-$SSDEEP && ./configure && make && make install
-#RUN apt install -y ssdeep
 RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && python setup.py build && python setup.py install
-#RUN pip install pydeep
 
 # Install Other Tools and Required Dependencies
 #RUN apt install -y tcpdump apparmor-utils && aa-disable /usr/sbin/tcpdump
 RUN apt install -y tcpdump apparmor-utils
 
 # Install Optional Volatility Tool
-#RUN apt install -y volatility
 RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility && python setup.py build && python setup.py install
 
 # Install Optional M2Crypto Tool and Required Dependencies
