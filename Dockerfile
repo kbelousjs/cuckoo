@@ -32,6 +32,7 @@ RUN apt install -y \
   libguac-client-vnc0 \
   libguac-client-ssh0 \
   guacd
+  nc
 
 # Upgrade pip libraries
 RUN pip install -U \
