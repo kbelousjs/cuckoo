@@ -70,7 +70,7 @@ COPY update_conf.py /home/cuckoo/update_conf.py
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
+RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/docker-entrypoint.sh
 
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /home/cuckoo
@@ -82,6 +82,8 @@ USER cuckoo
 
 # Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
 RUN cuckoo && cuckoo community
+
+WORKDIR /home/cuckoo/
 
 VOLUME ["/home/cuckoo/"]
 
