@@ -14,7 +14,7 @@ RUN apt update
 # Install Cuckoo Sandbox Required Python Libraries
 RUN apt install -y python python-pip python-dev libffi-dev libssl-dev
 RUN apt install -y python-virtualenv python-setuptools
-RUN apt install -y libjpeg-dev zlib1g-dev swig curl
+RUN apt install -y libjpeg-dev zlib1g-dev swig curl git
 
 # Install Optional Auxiliary Mitmproxy Module and Required Dependencies
 RUN apt install -y python3-pip && pip3 install -U pip
@@ -24,8 +24,7 @@ RUN pip3 install mitmproxy
 RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
 RUN cd /tmp && tar xzf ssdeep-$SSDEEP.tar.gz && cd ssdeep-$SSDEEP && ./configure && make && make install
 #RUN apt install -y ssdeep
-RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep
-RUN python setup.py build && python setup.py install
+RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && python setup.py build && python setup.py install
 #RUN pip install pydeep
 
 # Install Other Tools and Required Dependencies
