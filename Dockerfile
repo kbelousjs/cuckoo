@@ -39,44 +39,45 @@ RUN pip install -U \
   setuptools \
   wheel
 
-# Install Auxiliary Mitmproxy Module and Required Dependencies
+# Install auxiliary mitmproxy module and required dependencies
 #RUN apt install -y python3-pip
 #RUN pip3 install -U pip
 #RUN pip3 install mitmproxy
 
-# Install Pydeep Plugin and Required Dependencies
+# Install pydeep plugin and required dependencies
 RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
 RUN cd /tmp && tar xzf ssdeep-$SSDEEP.tar.gz && cd ssdeep-$SSDEEP && ./configure && make && make install
 RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && python setup.py build && python setup.py install
 
-# Install Volatility Tool
+# Install volatility tool and required dependencies
+RUN pip install distorm3
 RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility && python setup.py build && python setup.py install
 
-# Install M2Crypto Tool and Required Dependencies
+# Install m2crypto tool
 RUN pip install m2crypto
 
-# Create Group and User for Cuckoo Sandbox
+# Create group and user for cuckoo sandbox
 RUN useradd -m cuckoo
 RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
-# Install Cuckoo Sandbox and Required Dependencies
+# Install cuckoo sandbox and required dependencies
 #RUN pip install -U cuckoo==$CUCKOO
 RUN pip install cuckoo
 
-# Initialize Cuckoo Sandbox Configuration Files in /home/cuckoo/.cuckoo
+# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo
 RUN cuckoo
 
-# Downloadin Cuckoo Community (included over 300 Cuckoo Signatures)
+# Downloadin cuckoo community (included over 300 cuckoo signatures)
 RUN cuckoo community
 
-# Initialize Cuckoo Sandbox Web Interface (Built-in Django Web Server)
+# Initialize cuckoo sandbox web UI (built-in Django web server)
 RUN cuckoo web runserver 0.0.0.0:$CUCKOO_WEB_PORT
 
-# Clean up Unnecessary Files 
+# Clean up unnecessary files 
 RUN rm -rf /tmp/*
 
-# Uploading Cuckoo Configuration Files to Intstance $CWD (Cuckoo Working Directory)
+# Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
 #COPY conf ~/conf
 
 EXPOSE $CUCKOO_WEB_PORT
