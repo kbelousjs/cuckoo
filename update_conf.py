@@ -8,7 +8,7 @@ import ConfigParser
 #Setting reporting.conf
 reporting_cfg = ConfigParser.ConfigParser()
 reporting_cfg.read('/home/cuckoo/.cuckoo/conf/reporting.conf')
-with open('/home/cuckoo/.cuckoo/conf/reporting.conf', 'w') as cfile:
+with open('/home/cuckoo/.cuckoo/conf/reporting.conf', 'w') as conf_file:
 
     if os.environ.get('MONGO_HOST'):
         reporting_cfg.set('mongodb', 'enabled', 'yes')
@@ -16,6 +16,6 @@ with open('/home/cuckoo/.cuckoo/conf/reporting.conf', 'w') as cfile:
     if os.environ.get('MONGO_TCP_PORT'):
         reporting_cfg.set('mongodb', 'port', os.environ['MONGO_TCP_PORT'])
 
-    reporting_cfg.write(cfile)
+    reporting_cfg.write(conf_file)
 
-sys.exit()
+sys.exit(0)
