@@ -70,16 +70,17 @@ RUN rm -rf /tmp/*
 
 USER cuckoo
 
-# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo
-RUN cuckoo
-
-# Downloadin cuckoo community (included over 300 cuckoo signatures)
-RUN cuckoo community
-
-# Initialize cuckoo sandbox web UI (built-in Django web server)
-RUN cuckoo web runserver 0.0.0.0:$CUCKOO_WEB_PORT
+# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
+RUN cuckoo && cuckoo community
 
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
-#COPY conf ~/conf
+COPY conf/reporting.conf ~/.cuckoo/conf/reporting.conf
+COPY update_conf.py ~/update_conf.py
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/docker-entrypoint.sh ~/
+
+VOLUME ["/home/cuckoo/"]
 
 EXPOSE $CUCKOO_WEB_PORT
+
+ENTRYPOINT ["docker-entrypoint.sh"]
