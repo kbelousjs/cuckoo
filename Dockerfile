@@ -17,8 +17,8 @@ RUN apt install -y python-virtualenv python-setuptools
 RUN apt install -y libjpeg-dev zlib1g-dev swig curl git
 
 # Install Optional Auxiliary Mitmproxy Module and Required Dependencies
-RUN apt install -y python3-pip && pip3 install -U pip
-RUN pip3 install mitmproxy
+#RUN apt install -y python3-pip && pip3 install -U pip
+#RUN pip3 install mitmproxy
 
 # Install Optional Pydeep Plugin and Required Dependencies
 RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
