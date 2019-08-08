@@ -65,6 +65,17 @@ RUN usermod -a -G vboxusers cuckoo
 # Install cuckoo sandbox and required dependencies
 RUN pip install cuckoo
 
+# Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
+COPY conf/reporting.conf /home/cuckoo/.cuckoo/conf/reporting.conf
+COPY update_conf.py /home/cuckoo/update_conf.py
+
+# Script for initialize of container
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
+
+# Fix all permissions
+RUN chown -R cuckoo:cuckoo /home/cuckoo
+
 # Clean up unnecessary files 
 RUN rm -rf /tmp/*
 
@@ -72,12 +83,6 @@ USER cuckoo
 
 # Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
 RUN cuckoo && cuckoo community
-
-# Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
-COPY conf/reporting.conf ~/.cuckoo/conf/reporting.conf
-COPY update_conf.py ~/update_conf.py
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh ~/
 
 VOLUME ["/home/cuckoo/"]
 
