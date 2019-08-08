@@ -14,7 +14,7 @@ RUN apt update
 # Install Cuckoo Sandbox Required Python Libraries
 RUN apt install -y python python-pip python-dev libffi-dev libssl-dev
 RUN apt install -y python-virtualenv python-setuptools
-RUN apt install -y libjpeg-dev zlib1g-dev swig
+RUN apt install -y libjpeg-dev zlib1g-dev swig curl
 
 # Install Optional Auxiliary Mitmproxy Module and Required Dependencies
 RUN apt install -y python3-pip && pip3 install -U pip
