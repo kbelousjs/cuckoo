@@ -32,7 +32,8 @@ RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && p
 RUN apt install -y tcpdump apparmor-utils
 
 # Install Optional Volatility Tool
-RUN apt install -y volatility
+#RUN apt install -y volatility
+RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility && python setup.py build && python setup.py install
 
 # Install Optional M2Crypto Tool and Required Dependencies
 RUN apt install -y swig && pip install m2crypto==0.24.0
