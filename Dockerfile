@@ -21,13 +21,13 @@ RUN apt install -y python3-pip && pip3 install -U pip
 RUN pip3 install mitmproxy
 
 # Install Optional Pydeep Plugin and Required Dependencies
-#RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
-#RUN tar xzf /tmp/ssdeep-$SSDEEP.tar.gz
-#RUN cd /tmp/ssdeep-$SSDEEP && ./configure && make && make install
-RUN apt install -y ssdeep
-#RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd /pydeep
-#RUN python setup.py build && python setup.py install
-RUN pip install pydeep
+RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
+RUN tar xzf /tmp/ssdeep-$SSDEEP.tar.gz
+RUN cd /tmp/ssdeep-$SSDEEP && ./configure && make && make install
+#RUN apt install -y ssdeep
+RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd /pydeep
+RUN python setup.py build && python setup.py install
+#RUN pip install pydeep
 
 # Install Other Tools and Required Dependencies
 RUN apt install -y tcpdump apparmor-utils && aa-disable /usr/sbin/tcpdump
