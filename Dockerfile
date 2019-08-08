@@ -22,9 +22,9 @@ RUN pip3 install mitmproxy
 
 # Install Optional Pydeep Plugin and Required Dependencies
 RUN curl -L https://github.com/ssdeep-project/ssdeep/releases/download/release-$SSDEEP/ssdeep-$SSDEEP.tar.gz -o /tmp/ssdeep-$SSDEEP.tar.gz
-RUN ls -ll /tmp
 RUN cd /tmp && tar xzf ssdeep-$SSDEEP.tar.gz
-RUN cd ssdeep-$SSDEEP && ./configure && make && make install
+RUN ls -ll /tmp
+RUN cd ./ssdeep-$SSDEEP && ./configure && make && make install
 #RUN apt install -y ssdeep
 RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep
 RUN python setup.py build && python setup.py install
