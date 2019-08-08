@@ -27,13 +27,18 @@ services:
     networks:
       - cuckoo
     
-  #cuckoo:
-  #  build: .
-  #  image: ubuntu
-  #  depends_on:
-  #    - mongo
-  #    - db
-  #  environment:
+  cuckoo:
+    build: .
+    image: ubuntu
+    container_name: cuckoo
+    restart: always
+    depends_on:
+      - mongo
+      - postgres
+    volumes:
+      - cuckoo:/home/cuckoo/
+    networks:
+      - cuckoo
 
 networks:
   cuckoo:
@@ -41,3 +46,4 @@ networks:
 volumes:
   mongo:
   postgres:
+  cuckoo:
