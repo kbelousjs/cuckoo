@@ -6,9 +6,6 @@ services:
     image: mongo
     container_name: mongo
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongoadmin
-      MONGO_INITDB_ROOT_PASSWORD: admin
     volumes:
       - mongo:/data/db
     networks:
@@ -32,11 +29,10 @@ services:
     image: cuckoo:ubuntu
     ports:
       - "8000:8000"
-    links:
-      - mongo
-      - postgres
     container_name: cuckoo
     restart: always
+    env_file:
+      - variables.env
     depends_on:
       - mongo
       - postgres
