@@ -61,7 +61,7 @@ RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
 # Install cuckoo sandbox and required dependencies
-RUN pip install cuckoo
+RUN pip install cuckoo && pip install -U cuckoo
 
 # Setting up Cuckoo Working Directory to /opt/cuckoo ($CWD)
 RUN cuckoo --cwd /opt/cuckoo
