@@ -35,7 +35,7 @@ setUpCuckoo() {
   echo "===> Use default ports and hosts if not specified..."
   setDefaults
   
-  echo "===> Update /home/cuckoo/.cuckoo/conf/reporting.conf if needed..."
+  echo "===> Update /opt/cuckoo/conf/reporting.conf if needed..."
   ./update_conf.py
   
   echo
