@@ -58,18 +58,23 @@ RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git 
 RUN pip install m2crypto
 
 # Create group and user for cuckoo sandbox
-RUN useradd -m cuckoo
+RUN mkdir /opt/cuckoo
+RUN useradd -m /opt/cuckoo cuckoo
 RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
 # Install cuckoo sandbox and required dependencies
 RUN pip install cuckoo
 
-RUN mkdir /opt/cuckoo
+# Setting up Cuckoo Working Directory to /opt/cuckoo
+RUN cuckoo --cwd /opt/cuckoo
+
+# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
+RUN cuckoo && cuckoo community
 
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
-COPY conf/reporting.conf /opt/cuckoo/conf/reporting.conf
-COPY web/local_settings.py /opt/cuckoo/web/local_settings.py
+#COPY conf/reporting.conf /opt/cuckoo/conf/reporting.conf
+#COPY web/local_settings.py /opt/cuckoo/web/local_settings.py
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -84,12 +89,6 @@ RUN chown -R cuckoo:cuckoo /opt/cuckoo
 RUN rm -rf /tmp/*
 
 USER cuckoo
-
-# Setting up Cuckoo Working Directory to /opt/cuckoo
-RUN cuckoo --cwd /opt/cuckoo
-
-# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
-RUN cuckoo && cuckoo community
 
 WORKDIR /opt/cuckoo
 
