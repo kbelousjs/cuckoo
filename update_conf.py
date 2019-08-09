@@ -7,9 +7,9 @@ import ConfigParser
 
 #Setting reporting.conf
 reporting_cfg = ConfigParser.ConfigParser()
-reporting_cfg.read('/home/cuckoo/.cuckoo/conf/reporting.conf')
+reporting_cfg.read('/opt/cuckoo/conf/reporting.conf')
 
-with open('/home/cuckoo/.cuckoo/conf/reporting.conf', 'w') as conf_file:
+with open('/opt/cuckoo/conf/reporting.conf', 'w') as conf_file:
 
     if os.environ.get('MONGO_HOST'):
         reporting_cfg.set('mongodb', 'enabled', 'yes')
