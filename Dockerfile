@@ -74,7 +74,7 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
 
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /home/cuckoo
-RUN chmod u+x /home/cuckoo/docker-entrypoint.sh /home/cuckoo/update_conf.py
+RUN chmod u+x /home/cuckoo/update_conf.py
 
 # Clean up unnecessary files 
 RUN rm -rf /tmp/*
