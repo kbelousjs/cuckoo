@@ -65,30 +65,35 @@ RUN usermod -a -G vboxusers cuckoo
 # Install cuckoo sandbox and required dependencies
 RUN pip install cuckoo
 
+RUN mkdir /opt/cuckoo
+
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
-COPY conf/reporting.conf /home/cuckoo/.cuckoo/conf/reporting.conf
-COPY web/local_settings.py /home/cuckoo/.cuckoo/web/local_settings.py
-COPY update_conf.py /home/cuckoo/
+COPY conf/reporting.conf /opt/cuckoo/conf/reporting.conf
+COPY web/local_settings.py /opt/cuckoo/web/local_settings.py
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh /opt/cuckoo
+COPY update_conf.py /opt/cuckoo
+RUN chmod u+x /home/cuckoo/update_conf.py
 
 # Fix all permissions
-RUN chown -R cuckoo:cuckoo /home/cuckoo
-RUN chmod u+x /home/cuckoo/update_conf.py
+RUN chown -R cuckoo:cuckoo /opt/cuckoo
 
 # Clean up unnecessary files 
 RUN rm -rf /tmp/*
 
 USER cuckoo
 
+# Setting up Cuckoo Working Directory to /opt/cuckoo
+RUN cuckoo --cwd /opt/cuckoo
+
 # Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
 RUN cuckoo && cuckoo community
 
-WORKDIR /home/cuckoo/
+WORKDIR /opt/cuckoo
 
-VOLUME ["/home/cuckoo/"]
+VOLUME ["/opt/cuckoo"]
 
 EXPOSE $CUCKOO_WEB_PORT
 
