@@ -28,7 +28,7 @@ services:
     build: .
     image: cuckoo:ubuntu
     ports:
-      - "8000:8000"
+      - "80:8000"
     container_name: cuckoo
     restart: always
     env_file:
