@@ -59,7 +59,7 @@ RUN pip install m2crypto
 
 # Create group and user for cuckoo sandbox
 RUN mkdir /opt/cuckoo
-RUN useradd -m /opt/cuckoo cuckoo
+RUN useradd -d /opt/cuckoo cuckoo
 RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
@@ -80,7 +80,7 @@ RUN cuckoo && cuckoo community
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh /opt/cuckoo
 COPY update_conf.py /opt/cuckoo
-RUN chmod u+x /home/cuckoo/update_conf.py
+RUN chmod u+x /opt/cuckoo/update_conf.py
 
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /opt/cuckoo
