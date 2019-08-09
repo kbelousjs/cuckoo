@@ -66,14 +66,15 @@ RUN pip install cuckoo
 
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
 COPY conf/reporting.conf /home/cuckoo/.cuckoo/conf/reporting.conf
-COPY update_conf.py /home/cuckoo/update_conf.py
+COPY update_conf.py /home/cuckoo/
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/docker-entrypoint.sh
+RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
 
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /home/cuckoo
+RUN chmod u+x /home/cuckoo/docker-entrypoint.sh /home/cuckoo/update_conf.py
 
 # Clean up unnecessary files 
 RUN rm -rf /tmp/*
