@@ -78,7 +78,7 @@ RUN cuckoo && cuckoo community
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh /opt/cuckoo
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s /usr/local/bin/docker-entrypoint.sh /opt/cuckoo
 COPY update_conf.py /opt/cuckoo
 RUN chmod u+x /opt/cuckoo/update_conf.py
 
