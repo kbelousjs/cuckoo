@@ -36,7 +36,7 @@ setUpCuckoo() {
   setDefaults
   
   echo "===> Update /home/cuckoo/.cuckoo/conf/reporting.conf if needed..."
-  /update_conf.py
+  ./update_conf.py
   
   echo
   if [ ! "$MONGO_HOST" == "" ]; then
