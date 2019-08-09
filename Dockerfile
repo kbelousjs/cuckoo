@@ -89,4 +89,5 @@ VOLUME ["/opt/cuckoo"]
 
 EXPOSE $CUCKOO_UI_PORT
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+#ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash"]
