@@ -56,6 +56,7 @@ if [ -z "$MONGO_HOST" ]; then
   exit 1
 fi
 
-set -- su-exec cuckoo /sbin/tini -- cuckoo web runserver 0.0.0.0:CUCKOO_WEB_PORT
+#set -- su-exec cuckoo /sbin/tini -- cuckoo web runserver 0.0.0.0:CUCKOO_WEB_PORT
+set -- cuckoo web runserver 0.0.0.0:$CUCKOO_UI_PORT
 
 exec "$@"
