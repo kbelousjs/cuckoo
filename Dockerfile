@@ -67,6 +67,7 @@ RUN pip install cuckoo
 
 # Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
 COPY conf/reporting.conf /home/cuckoo/.cuckoo/conf/reporting.conf
+COPY web/local_settings.py /home/cuckoo/.cuckoo/web/local_settings.py
 COPY update_conf.py /home/cuckoo/
 
 # Script for initialize of container
