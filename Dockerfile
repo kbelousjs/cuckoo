@@ -4,15 +4,12 @@ LABEL maintainer "https://github.com/kbelousjs"
 
 # Define environment variables
 #ENV CUCKOO 2.0.7
-ENV CUCKOO_WEB_PORT 8000
+ENV CUCKOO_UI_PORT 8000
 ENV SSDEEP 2.14.1
 ENV VBOXUSERS_GID 117
 
-# Update indexes of packages
-RUN apt update
-
-# Install cuckoo sandbox required python libraries and other required packages
-RUN apt install -y \
+# Update indexes of packages and install cuckoo sandbox required python libraries and other required packages
+RUN apt update && apt install -y \
   python \
   python-pip \
   python-dev \
@@ -57,7 +54,7 @@ RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git 
 # Install m2crypto tool
 RUN pip install m2crypto
 
-# Create group and user for cuckoo sandbox
+# Create directory, group and user for cuckoo sandbox
 RUN mkdir /opt/cuckoo
 RUN useradd -d /opt/cuckoo cuckoo
 RUN groupadd -g $VBOXUSERS_GID vboxusers
@@ -66,15 +63,11 @@ RUN usermod -a -G vboxusers cuckoo
 # Install cuckoo sandbox and required dependencies
 RUN pip install cuckoo
 
-# Setting up Cuckoo Working Directory to /opt/cuckoo
+# Setting up Cuckoo Working Directory to /opt/cuckoo ($CWD)
 RUN cuckoo --cwd /opt/cuckoo
 
-# Initialize cuckoo sandbox configuration files in /home/cuckoo/.cuckoo && Downloadin cuckoo community (included over 300 cuckoo signatures)
+# Initialize Cuckoo Sandbox configuration files to $CWD && Downloading Cuckoo Community (included over 300 cuckoo signatures)
 RUN cuckoo && cuckoo community
-
-# Uploading cuckoo configuration files to intstance $CWD (Cuckoo Working Directory)
-#COPY conf/reporting.conf /opt/cuckoo/conf/reporting.conf
-#COPY web/local_settings.py /opt/cuckoo/web/local_settings.py
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -94,6 +87,6 @@ WORKDIR /opt/cuckoo
 
 VOLUME ["/opt/cuckoo"]
 
-EXPOSE $CUCKOO_WEB_PORT
+EXPOSE $CUCKOO_UI_PORT
 
 ENTRYPOINT ["docker-entrypoint.sh"]
