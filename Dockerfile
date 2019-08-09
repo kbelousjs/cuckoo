@@ -70,7 +70,7 @@ COPY update_conf.py /home/cuckoo/
 
 # Script for initialize of container
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && ln -s usr/local/bin/docker-entrypoint.sh /home/cuckoo/
 
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /home/cuckoo
