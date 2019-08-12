@@ -52,6 +52,9 @@ RUN cd /tmp && git clone https://github.com/kbandla/pydeep.git && cd pydeep && p
 RUN pip install distorm3
 RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git && cd volatility && python setup.py build && python setup.py install
 
+# Install remotevbox for Virtual Box Web Service
+RUN pip install remotevbox
+
 # Install m2crypto tool
 RUN pip install m2crypto
 
