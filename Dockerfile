@@ -5,6 +5,7 @@ LABEL maintainer "https://github.com/kbelousjs"
 # Define environment variables
 #ENV CUCKOO 2.0.7
 ENV CUCKOO_UI_PORT 8000
+ENV CUCKOO_CWD /opt/cuckoo
 ENV SSDEEP 2.14.1
 ENV VBOXUSERS_GID 117
 
@@ -55,8 +56,8 @@ RUN cd /tmp && git clone https://github.com/volatilityfoundation/volatility.git 
 RUN pip install m2crypto
 
 # Create directory, group and user for cuckoo sandbox
-RUN mkdir /opt/cuckoo
-RUN useradd -d /opt/cuckoo cuckoo
+RUN mkdir $CUCKOO_CWD
+RUN useradd -d $CUCKOO_CWD cuckoo
 RUN groupadd -g $VBOXUSERS_GID vboxusers
 RUN usermod -a -G vboxusers cuckoo
 
@@ -64,7 +65,7 @@ RUN usermod -a -G vboxusers cuckoo
 RUN pip install cuckoo && pip install -U cuckoo
 
 # Setting up Cuckoo Working Directory to /opt/cuckoo ($CWD)
-RUN cuckoo --cwd /opt/cuckoo
+#RUN cuckoo --cwd /opt/cuckoo
 
 # Initialize Cuckoo Sandbox configuration files to $CWD && Downloading Cuckoo Community (included over 300 cuckoo signatures)
 RUN cuckoo && cuckoo community
@@ -78,8 +79,10 @@ RUN chmod u+x /opt/cuckoo/update_conf.py
 # Fix all permissions
 RUN chown -R cuckoo:cuckoo /opt/cuckoo
 
-# Clean up unnecessary files 
+# Clean up unnecessary files
 RUN rm -rf /tmp/*
+# Clean up apt cache
+RUN apt clean
 
 USER cuckoo
 
