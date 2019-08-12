@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-LABEL maintainer "https://github.com/kbelousjs"
+LABEL maintainer "https://github.com/kibelous"
 
 # Define environment variables
 #ENV CUCKOO 2.0.7
