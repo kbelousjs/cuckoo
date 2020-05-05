@@ -15,11 +15,11 @@ env:
     DOCKER_REGISTRY_APP: cuckoo
     DOCKER_IMAGE: "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}"
 
-before_install:
-  - echo "${HADOLINT}" && ls -al ${HADOLINT}
 install:
   - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
   - npm install -g snyk
+after_install:
+  - echo "${HADOLINT}" && ls -al ${HADOLINT}
   
 # for Nginx container
 # - pip install gixy
