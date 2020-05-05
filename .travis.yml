@@ -1,11 +1,43 @@
+# Use Ubuntu 18.04 (Bionic Beaver) as a build environment (https://docs.travis-ci.com/user/reference/bionic/)
+dist: bionic
+
+services: 
+  - docker
+
 language: python
-
 python:
-  - '3.8'
-  - '3.7'
-  - '2.7'
+  - 3.8
 
-services: docker
+env:
+  global:
+    # Default Environment Variables (https://docs.travis-ci.com/user/environment-variables/)
+    HADOLINT: "${HOME}/hadolint"
+    DOCKER_REGISTRY_APP: cuckoo
+    DOCKER_IMAGE: "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}"
 
-git:
-  depth: true
+install:
+  - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
+  - npm install -g snyk
+  
+# for Nginx container
+# - pip install gixy
+
+stages:
+  - if: branch =~ /^master|live|^RC_.*|^SB_.*$/
+  - name: lint dockerfile
+  - name: build image and snyk scan
+
+jobs:
+  include:
+    - stage: lint dockerfile
+      script:
+        # List files which name starts with 'Dockerfile' eg. Dockerfile, Dockerfile.build, etc.
+        - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
+    - stage: build image and snyk scan
+      script:
+        - docker build -t ${DOCKER_IMAGE} .
+      after_success:
+        # Create a snapshot of docker image for continuous monitoring of vulnerabilities. Define --flag to get remediation advice for base image in Dockerfile.
+        - snyk monitor --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --project-name="docker-image|${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
+      after_script:
+        - docker push "${DOCKER_IMAGE}"
