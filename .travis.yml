@@ -32,7 +32,8 @@ jobs:
     - stage: lint dockerfile
       script:
         # List files which name starts with 'Dockerfile' eg. Dockerfile, Dockerfile.build, etc.
-        - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
+        - ${HADOLINT} Dockerfile
+        # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
     - stage: build image and snyk scan
       script:
         - docker build -t ${DOCKER_IMAGE} .
