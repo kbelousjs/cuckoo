@@ -29,14 +29,14 @@ git:
   depth: 100
 
 stages:
-  - lint dockerfile
+  - Lint Dockerfile
 
 # If before_install, install or before_script returns a non-zero exit code, the build is errored and stops immediately 
 # If script returns a non-zero exit code, the build is failed, but continues to run before being marked as failed.
 # The exit code of after_success, after_failure, after_script, after_deploy and subsequent stages do not affect the build result. However, if one of these stages times out, the build is marked as failed.
 jobs:
   include:
-    - stage: lint dockerfile
+    - stage: Lint Dockerfile
       install:
         - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
       script:
