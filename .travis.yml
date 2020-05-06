@@ -29,7 +29,8 @@ git:
   depth: 100
 
 stages:
-  - Lint Dockerfile
+  #- Lint Dockerfile
+  - Build Docker Image and Vulnerabilities Scan
 
 # If before_install, install or before_script returns a non-zero exit code, the build is errored and stops immediately 
 # If script returns a non-zero exit code, the build is failed, but continues to run before being marked as failed.
@@ -55,4 +56,4 @@ jobs:
       script:
         - docker build -t ${DOCKER_IMAGE} .
         # Create a snapshot of docker image for continuous monitoring of vulnerabilities. Define --flag to get remediation advice for base image in Dockerfile.
-        - snyk monitor --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --project-name="docker-image|${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
+        - snyk monitor --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --project-name="docker-image | ${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
