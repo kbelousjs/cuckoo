@@ -1,40 +1,59 @@
+# Build starts faster without `sudo`
+sudo: false
+
 # Use Ubuntu 18.04 (Bionic Beaver) as a build environment (https://docs.travis-ci.com/user/reference/bionic/)
 dist: bionic
 
-services: 
-  - docker
-
 language: python
 python:
-  - 3.8
+  - 3.7
 
+# Build will be faster with cache
+cache:
+  directories:
+    - ${HOME}/.cache/pip
+  # Default timeout is 180
+  timeout: 300
+before_cache:
+  - rm -rf ${HOME}/.cache/pip/log/
+  
 env:
   global:
     # Default Environment Variables (https://docs.travis-ci.com/user/environment-variables/)
-    HADOLINT: "${HOME}/hadolint"
-    DOCKER_REGISTRY_APP: cuckoo
-    DOCKER_IMAGE: "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}"
+    - HADOLINT="${HOME}/hadolint"
+    - DOCKER_REGISTRY_APP=cuckoo
+    - DOCKER_IMAGE="${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}"
+
+# Increase depth (from default 50) to preserve version from `git describe`
+git:
+  depth: 100
 
 install:
   - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
   - npm install -g snyk
-  
-# for Nginx container
-# - pip install gixy
+  # for Nginx container
+  # - pip install gixy
 
-stages:
-  - name: build docker image
-    if: branch =~ /^master|live|^RC_.*|^SB_.*$/
-
+# If before_install, install or before_script returns a non-zero exit code, the build is errored and stops immediately 
+# If script returns a non-zero exit code, the build is failed, but continues to run before being marked as failed.
+# The exit code of after_success, after_failure, after_script, after_deploy and subsequent stages do not affect the build result. However, if one of these stages times out, the build is marked as failed.
 jobs:
   include:
-    - stage: build docker image
-      before_script:
-        - git ls-files --exclude='Dockerfile*' --ignored | xargs -I {} --max-lines=1 ${HADOLINT} {} && echo "OK" || echo "Failed"
+    - stage: lint dockerfile
+      install:
+        - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
+      script:
+        # Check a Dockerfile against best practices for writing Dockerfiles (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+        # Description for each rule contains into github (https://github.com/hadolint/hadolint/wiki)
+        # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
+        - if [$(${HADOLINT} Dockerfile | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules" && false; else echo "Dockerfile is ready to build" && true; fi
+    - stage: build and vulnerabilities scan
+      sudo: required
+      services:
+        - docker
+      install:
+        - npm install -g snyk
       script:
         - docker build -t ${DOCKER_IMAGE} .
-      after_script:
         # Create a snapshot of docker image for continuous monitoring of vulnerabilities. Define --flag to get remediation advice for base image in Dockerfile.
         - snyk monitor --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --project-name="docker-image|${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
-      # after_script:
-      #  - docker push "${DOCKER_IMAGE}"
