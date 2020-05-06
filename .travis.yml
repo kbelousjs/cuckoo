@@ -43,7 +43,9 @@ jobs:
         # Check a Dockerfile against best practices for writing Dockerfiles (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
         # Description for each rule contains into github (https://github.com/hadolint/hadolint/wiki)
         # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
-        - if [ $(${HADOLINT} Dockerfile | tee /dev/tty | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules" && false; fi
+        - URed='\033[4;31m'
+        - Color_Off='\033[0m' # Text Reset
+        - if [ $(${HADOLINT} Dockerfile | tee /dev/tty | wc -l) -gt 0 ]; then echo "" && echo -e "${URed}Dockerfile is not met with hadolint rules${Color_Off}" && echo "" && false; fi
     - stage: build and vulnerabilities scan
       sudo: required
       services:
