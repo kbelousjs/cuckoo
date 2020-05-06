@@ -30,7 +30,7 @@ jobs:
   include:
     - stage: build docker image
       before_script:
-        - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
+        - git ls-files --exclude='Dockerfile*' --ignored | xargs -I {} --max-lines=1 ${HADOLINT} {} && echo "OK" || echo "Failed"
       script:
         - docker build -t ${DOCKER_IMAGE} .
       after_script:
