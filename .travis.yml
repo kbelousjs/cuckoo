@@ -28,11 +28,8 @@ env:
 git:
   depth: 100
 
-install:
-  - curl -sL -o ${HADOLINT} "https://github.com/hadolint/hadolint/releases/download/v1.17.6/hadolint-$(uname -s)-$(uname -m)" && chmod 700 ${HADOLINT}
-  - npm install -g snyk
-  # for Nginx container
-  # - pip install gixy
+stages:
+  - lint dockerfile
 
 # If before_install, install or before_script returns a non-zero exit code, the build is errored and stops immediately 
 # If script returns a non-zero exit code, the build is failed, but continues to run before being marked as failed.
@@ -46,7 +43,9 @@ jobs:
         # Check a Dockerfile against best practices for writing Dockerfiles (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
         # Description for each rule contains into github (https://github.com/hadolint/hadolint/wiki)
         # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
-        - if [$(${HADOLINT} Dockerfile | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules" && false; else echo "Dockerfile is ready to build" && true; fi
+        - ${HADOLINT} Dockerfile
+        - ${HADOLINT} Dockerfile | wc -l
+        - if [ $(${HADOLINT} Dockerfile | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules"; fi
     - stage: build and vulnerabilities scan
       sudo: required
       services:
