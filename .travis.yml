@@ -45,7 +45,7 @@ jobs:
         # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
         - URed='\033[4;31m'
         - Color_Off='\033[0m' # Text Reset
-        - if [ $(${HADOLINT} Dockerfile | tee /dev/tty | wc -l) -gt 0 ]; then echo "" && echo -e "${URed}Dockerfile is not met with Hadolint rules${Color_Off}. Rules: https://github.com/hadolint/hadolint/wiki" && echo "" && false; fi
+        - if [ $(${HADOLINT} Dockerfile | tee /dev/tty | wc -l) -gt 0 ]; then echo "" && echo -e "${URed}Dockerfile is not met with Hadolint rules${Color_Off}" && echo "" && false; fi
     - stage: Build and Vulnerabilities scan
       sudo: required
       services:
