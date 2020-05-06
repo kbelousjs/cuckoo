@@ -46,7 +46,7 @@ jobs:
         - URed='\033[4;31m'
         - Color_Off='\033[0m' # Text Reset
         - if [ $(${HADOLINT} Dockerfile | tee /dev/tty | wc -l) -gt 0 ]; then echo "" && echo -e "${URed}Dockerfile is not met with hadolint rules${Color_Off}" && echo "" && false; fi
-    - stage: build and vulnerabilities scan
+    - stage: Build and Vulnerabilities scan
       sudo: required
       services:
         - docker
