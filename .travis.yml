@@ -43,9 +43,7 @@ jobs:
         # Check a Dockerfile against best practices for writing Dockerfiles (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
         # Description for each rule contains into github (https://github.com/hadolint/hadolint/wiki)
         # - git ls-files --exclude='Dockerfile*' --ignored | xargs --max-lines=1 ${HADOLINT}
-        - ${HADOLINT} Dockerfile
-        - ${HADOLINT} Dockerfile | wc -l
-        - if [ $(${HADOLINT} Dockerfile | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules"; fi
+        - if [ $(${HADOLINT} Dockerfile | wc -l) -gt 0 ]; then echo "Dockerfile is not met with hadolint rules" && false; fi
     - stage: build and vulnerabilities scan
       sudo: required
       services:
