@@ -57,4 +57,4 @@ jobs:
         - docker build -t ${DOCKER_IMAGE} .
         # Create a snapshot of docker image for continuous monitoring of vulnerabilities. Define --flag to get remediation advice for base image in Dockerfile.
         - snyk monitor --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --project-name="docker-image | ${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
-        - snyl test --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
+        - snyk test --docker "${DOCKER_REGISTRY_APP}:${TRAVIS_BRANCH}" --file=Dockerfile
